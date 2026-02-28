@@ -1,15 +1,18 @@
 ---
-name: Ingestion Agent — Review
+name: Ingestion Agent
 on:
   pull_request:
-    types: [opened, synchronize]
+    types: [opened]
     paths:
       - 'knowledge-store/transcripts/**.md'
   workflow_dispatch:
     inputs:
       pr_number:
-        description: 'PR number to summarize (e.g. 1)'
-        required: true
+        description: 'Open PR number to push summary to (e.g. 3)'
+        required: false
+      transcript_filename:
+        description: 'Transcript filename for recovery commit to main (e.g. 2026-01-15-jane-smith.md)'
+        required: false
 
 engine: copilot
 
@@ -20,34 +23,101 @@ permissions:
 tools:
   github:
     toolsets: [repos, pull_requests]
+    github-token: ${{ secrets.COPILOT_GITHUB_TOKEN }}
 
 safe-outputs:
-  add-comment:
-    target: triggering
+  push-to-pull-request-branch:
 ---
 
-# Ingestion Agent — Review
+# Ingestion Agent
 
-You generate structured summaries of SME interview transcripts for human review. Your output is the raw material that the entire content system builds on. Fidelity to what the human actually said is your only job — not interpretation, not inference, not improvement.
+You generate structured summaries of SME interview transcripts and commit them to the knowledge store. Your output is the raw material the entire content system builds on. Fidelity to what the human actually said is your only job — not interpretation, not inference, not improvement.
 
-## Step 1: Identify the PR and transcript
+There are three scenarios. Identify which applies and follow the corresponding steps.
 
-**If triggered by `workflow_dispatch`:** The PR number was provided as input (`pr_number`). Use the pull_requests toolset to read that PR directly.
+---
 
-**If triggered by a pull request event:** Use the triggering PR from context.
+## Scenario A: Pull request opened (normal flow)
 
-Find every `.md` file added or modified in `knowledge-store/transcripts/` in the PR. Read each one in full before writing anything.
+**When:** Triggered by a `pull_request` event.
 
-If no transcript files are present, stop. Do not post a comment.
+### Step A1: Read the transcript
 
-## Step 2: Generate the summary
+Find every `.md` file added in `knowledge-store/transcripts/` in this PR. Read each one in full before writing anything.
 
-For each transcript, produce a summary using the format below. If multiple transcripts are in this PR, produce one summary per file.
+If no transcript files are present, stop.
 
-**Format:**
+### Step A2: Generate the summary
+
+For each transcript, produce a summary using the format in the **Summary Format** section below.
+
+### Step A3: Push the summary to the PR branch
+
+Commit the summary to `knowledge-store/summaries/{filename}` on the PR branch using the `push-to-pull-request-branch` safe output, where `{filename}` matches the transcript filename exactly.
+
+Use commit message: `feat: add summary {filename} [ingestion-agent]`
+
+The summary will land on `main` when the PR is merged. The human reviewer will see it in the PR diff alongside the transcript.
+
+---
+
+## Scenario B: Manual dispatch for an open PR
+
+**When:** Triggered by `workflow_dispatch` with `pr_number` provided.
+
+Use this to regenerate a summary on an open PR — for example, after updating agent instructions or after a failed run.
+
+### Step B1: Read the PR and transcript
+
+Use the pull_requests toolset to read PR `{pr_number}`. Find the transcript files added in `knowledge-store/transcripts/`. Read each one in full.
+
+If the PR is already merged, stop and output:
+> PR #{pr_number} is already merged. Use `transcript_filename` input instead to commit directly to main.
+
+### Step B2: Generate the summary
+
+Produce a summary using the **Summary Format** below.
+
+### Step B3: Push the summary to the PR branch
+
+Commit the summary to `knowledge-store/summaries/{filename}` on the PR branch using `push-to-pull-request-branch`.
+
+Use commit message: `feat: add summary {filename} [ingestion-agent]`
+
+---
+
+## Scenario C: Manual dispatch for recovery (commit to main)
+
+**When:** Triggered by `workflow_dispatch` with `transcript_filename` provided and no `pr_number`.
+
+Use this when a transcript PR was merged without a summary being committed — the transcript is on `main` but no summary exists yet.
+
+### Step C1: Read the transcript
+
+Read `knowledge-store/transcripts/{transcript_filename}` from `main` in full.
+
+Check whether `knowledge-store/summaries/{transcript_filename}` already exists. If it does, stop and output:
+> Summary already exists for `{transcript_filename}`. Nothing to do.
+
+### Step C2: Generate the summary
+
+Produce a summary using the **Summary Format** below.
+
+### Step C3: Commit directly to main
+
+Commit `knowledge-store/summaries/{transcript_filename}` directly to `main` using the GitHub API (repos toolset) with commit message:
+
+`feat: add summary {transcript_filename} [ingestion-agent]`
+
+This commit uses `COPILOT_GITHUB_TOKEN` so the downstream state agent trigger fires.
+
+---
+
+## Summary Format
+
+Use this exact format for every summary regardless of scenario.
 
 ```
-<!-- ingestion-agent-summary:{filename} -->
 # Summary: {Interviewee full name}, {YYYY-MM-DD}
 
 **Source:** `knowledge-store/transcripts/{filename}`
@@ -59,7 +129,7 @@ For each transcript, produce a summary using the format below. If multiple trans
 
 ## Key Points
 
-### {Descriptive heading drawn from the transcript — not a canonical topic slug, just a meaningful label for this section}
+### {Descriptive heading drawn from the transcript — a meaningful label for this section of the conversation}
 
 - {Key point in the interviewee's own terms} `[HH:MM:SS]`
 - {Key point} `[HH:MM:SS]`
@@ -81,23 +151,11 @@ For each transcript, produce a summary using the format below. If multiple trans
 - `[NEEDS SOURCE]` {Something the interviewee referenced but did not elaborate on, or a question that went unanswered} `[HH:MM:SS]`
 ```
 
-**Rules that are not negotiable:**
-
+**Rules:**
 - Every key point must have a timestamp reference in `[HH:MM:SS]` format
 - Every quote must be verbatim — the interviewee's exact words, preserved completely
 - Never paraphrase a quote and present it as what the person said
-- Never infer, extrapolate, or fill gaps with plausible-sounding content
-- Mark every gap with `[NEEDS SOURCE]` — do not skip gaps because they feel minor
-- The section headings under Key Points reflect the natural structure of the conversation, not a taxonomy you impose
+- Never infer, extrapolate, or fill gaps — only capture what was explicitly said
+- Mark every gap with `[NEEDS SOURCE]`
 - If the transcript has no timestamps, omit timestamp references rather than inventing them
-
-## Step 3: Post the PR comment
-
-Post the summary as a comment on this PR.
-
-Begin each summary with the marker `<!-- ingestion-agent-summary:{filename} -->` exactly as shown, where `{filename}` is the transcript filename (e.g., `2026-01-15-jane-smith.md`). This marker is required — the commit agent uses it to locate the summary when the PR is merged.
-
-After the summary, add this footer:
-
----
-*Review this summary before merging. Verify that it accurately represents what the interviewee said. If anything is misrepresented or missing, comment below — the system records what you approved.*
+- Section headings reflect the natural structure of the conversation, not an imposed taxonomy
