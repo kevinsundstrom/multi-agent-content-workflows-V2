@@ -30,6 +30,9 @@ safe-outputs:
 
 post-steps:
   - name: Commit STATE.md if changed
+    env:
+      GIT_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+      GIT_REPO: ${{ github.repository }}
     run: |
       git add knowledge-store/STATE.md
       if git diff --cached --quiet; then
@@ -37,6 +40,7 @@ post-steps:
       else
         git config user.name "state-agent[bot]"
         git config user.email "state-agent@noreply.github.com"
+        git remote set-url origin "https://x-access-token:${GIT_TOKEN}@github.com/${GIT_REPO}.git"
         git commit -m "chore: update STATE.md [state-agent]"
         git push
       fi

@@ -25,6 +25,8 @@ post-steps:
   - name: Commit summary if written
     env:
       TRANSCRIPT_FILENAME: ${{ inputs.transcript_filename }}
+      GIT_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+      GIT_REPO: ${{ github.repository }}
     run: |
       git add knowledge-store/summaries/
       if git diff --cached --quiet; then
@@ -32,6 +34,7 @@ post-steps:
       else
         git config user.name "ingestion-agent[bot]"
         git config user.email "ingestion-agent@noreply.github.com"
+        git remote set-url origin "https://x-access-token:${GIT_TOKEN}@github.com/${GIT_REPO}.git"
         git commit -m "feat: add summary $TRANSCRIPT_FILENAME [ingestion-agent]"
         git push
       fi

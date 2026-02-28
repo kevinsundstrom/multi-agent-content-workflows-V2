@@ -22,7 +22,7 @@
 # For more information: https://github.github.com/gh-aw/introduction/overview/
 #
 #
-# gh-aw-metadata: {"schema_version":"v1","frontmatter_hash":"dbf1da8dc1d6591105f1a94202b32df6ad47927d38de49d1f237345ba3ac0e81","compiler_version":"v0.50.7"}
+# gh-aw-metadata: {"schema_version":"v1","frontmatter_hash":"84e9bb4a428c61659b654a7b3f2a0f9536c36dc7a7c7933ef876388cdff81076","compiler_version":"v0.50.7"}
 
 name: "Ingestion Agent — Recovery"
 "on":
@@ -487,9 +487,11 @@ jobs:
             echo 'AWF binary not installed, skipping firewall log summary'
           fi
       - env:
+          GIT_REPO: ${{ github.repository }}
+          GIT_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
           TRANSCRIPT_FILENAME: ${{ inputs.transcript_filename }}
         name: Commit summary if written
-        run: "git add knowledge-store/summaries/\nif git diff --cached --quiet; then\n  echo \"No changes staged — noop\"\nelse\n  git config user.name \"ingestion-agent[bot]\"\n  git config user.email \"ingestion-agent@noreply.github.com\"\n  git commit -m \"feat: add summary $TRANSCRIPT_FILENAME [ingestion-agent]\"\n  git push\nfi"
+        run: "git add knowledge-store/summaries/\nif git diff --cached --quiet; then\n  echo \"No changes staged — noop\"\nelse\n  git config user.name \"ingestion-agent[bot]\"\n  git config user.email \"ingestion-agent@noreply.github.com\"\n  git remote set-url origin \"https://x-access-token:${GIT_TOKEN}@github.com/${GIT_REPO}.git\"\n  git commit -m \"feat: add summary $TRANSCRIPT_FILENAME [ingestion-agent]\"\n  git push\nfi"
 
       - name: Upload agent artifacts
         if: always()

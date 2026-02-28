@@ -22,7 +22,7 @@
 # For more information: https://github.github.com/gh-aw/introduction/overview/
 #
 #
-# gh-aw-metadata: {"schema_version":"v1","frontmatter_hash":"2686e1da4a12c66f4fc2d01f6e35f02375bb353eed0647dfcd3fa2af9f0d99a7","compiler_version":"v0.50.7"}
+# gh-aw-metadata: {"schema_version":"v1","frontmatter_hash":"0454bef946b9d7b35fd5d16573d302a2885b5598f6939055c65de70c58e989d1","compiler_version":"v0.50.7"}
 
 name: "State Agent"
 "on":
@@ -805,8 +805,11 @@ jobs:
           else
             echo 'AWF binary not installed, skipping firewall log summary'
           fi
-      - name: Commit STATE.md if changed
-        run: "git add knowledge-store/STATE.md\nif git diff --cached --quiet; then\n  echo \"No changes staged — noop\"\nelse\n  git config user.name \"state-agent[bot]\"\n  git config user.email \"state-agent@noreply.github.com\"\n  git commit -m \"chore: update STATE.md [state-agent]\"\n  git push\nfi"
+      - env:
+          GIT_REPO: ${{ github.repository }}
+          GIT_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+        name: Commit STATE.md if changed
+        run: "git add knowledge-store/STATE.md\nif git diff --cached --quiet; then\n  echo \"No changes staged — noop\"\nelse\n  git config user.name \"state-agent[bot]\"\n  git config user.email \"state-agent@noreply.github.com\"\n  git remote set-url origin \"https://x-access-token:${GIT_TOKEN}@github.com/${GIT_REPO}.git\"\n  git commit -m \"chore: update STATE.md [state-agent]\"\n  git push\nfi"
 
       - name: Upload agent artifacts
         if: always()
