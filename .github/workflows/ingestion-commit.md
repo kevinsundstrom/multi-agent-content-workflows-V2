@@ -11,10 +11,11 @@ engine: copilot
 permissions:
   contents: read
   pull-requests: read
+  issues: read
 
 tools:
   github:
-    toolsets: [repos, pull_requests]
+    toolsets: [repos, pull_requests, issues]
     github-token: ${{ secrets.COPILOT_GITHUB_TOKEN }}
 ---
 
