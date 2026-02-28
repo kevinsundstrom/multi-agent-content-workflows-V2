@@ -92,6 +92,8 @@ Use commit message: `feat: add summary {filename} [ingestion-agent]`
 
 Use this when a transcript PR was merged without a summary being committed — the transcript is on `main` but no summary exists yet.
 
+**Critical:** Do NOT use `push-to-pull-request-branch` in this scenario. There is no PR context. You must use the GitHub API via the repos toolset to commit directly to `main`.
+
 ### Step C1: Read the transcript
 
 Read `knowledge-store/transcripts/{transcript_filename}` from `main` in full.
@@ -103,13 +105,13 @@ Check whether `knowledge-store/summaries/{transcript_filename}` already exists. 
 
 Produce a summary using the **Summary Format** below.
 
-### Step C3: Commit directly to main
+### Step C3: Commit directly to main using the repos toolset
 
-Commit `knowledge-store/summaries/{transcript_filename}` directly to `main` using the GitHub API (repos toolset) with commit message:
+Use the GitHub API (repos toolset `create_or_update_file` or equivalent) to create `knowledge-store/summaries/{transcript_filename}` directly on the `main` branch.
 
-`feat: add summary {transcript_filename} [ingestion-agent]`
+Commit message: `feat: add summary {transcript_filename} [ingestion-agent]`
 
-This commit uses `COPILOT_GITHUB_TOKEN` so the downstream state agent trigger fires.
+This uses `COPILOT_GITHUB_TOKEN` (configured in the tools section) so the downstream state agent trigger fires. Do not open a PR. Do not use push-to-pull-request-branch.
 
 ---
 
