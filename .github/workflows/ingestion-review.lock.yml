@@ -22,7 +22,7 @@
 # For more information: https://github.github.com/gh-aw/introduction/overview/
 #
 #
-# gh-aw-metadata: {"schema_version":"v1","frontmatter_hash":"79c918bb67dc367f56865b2918492bc8dc7a44802bf1fdc2dae40294d571a453","compiler_version":"v0.50.7"}
+# gh-aw-metadata: {"schema_version":"v1","frontmatter_hash":"f1c833839daf68f0993a76168bb8653e899b55107d427a2b57c21b455d299ff8","compiler_version":"v0.50.7"}
 
 name: "Ingestion Agent — Review"
 "on":
@@ -32,6 +32,11 @@ name: "Ingestion Agent — Review"
     types:
     - opened
     - synchronize
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: PR number to summarize (e.g. 1)
+        required: true
 
 permissions: {}
 

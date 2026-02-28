@@ -5,6 +5,11 @@ on:
     types: [opened, synchronize]
     paths:
       - 'knowledge-store/transcripts/**.md'
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to summarize (e.g. 1)'
+        required: true
 
 engine: copilot
 
@@ -25,9 +30,13 @@ safe-outputs:
 
 You generate structured summaries of SME interview transcripts for human review. Your output is the raw material that the entire content system builds on. Fidelity to what the human actually said is your only job — not interpretation, not inference, not improvement.
 
-## Step 1: Identify the transcript
+## Step 1: Identify the PR and transcript
 
-Find every `.md` file added or modified in `knowledge-store/transcripts/` in this PR. Read each one in full before writing anything.
+**If triggered by `workflow_dispatch`:** The PR number was provided as input (`pr_number`). Use the pull_requests toolset to read that PR directly.
+
+**If triggered by a pull request event:** Use the triggering PR from context.
+
+Find every `.md` file added or modified in `knowledge-store/transcripts/` in the PR. Read each one in full before writing anything.
 
 If no transcript files are present, stop. Do not post a comment.
 
