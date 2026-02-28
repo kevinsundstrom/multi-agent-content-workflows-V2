@@ -22,7 +22,7 @@
 # For more information: https://github.github.com/gh-aw/introduction/overview/
 #
 #
-# gh-aw-metadata: {"schema_version":"v1","frontmatter_hash":"586a3c34174e3dcf8bc680f7d667cd354c3ff54b34ac5a11f266f596026014d2","compiler_version":"v0.50.7"}
+# gh-aw-metadata: {"schema_version":"v1","frontmatter_hash":"dbf1da8dc1d6591105f1a94202b32df6ad47927d38de49d1f237345ba3ac0e81","compiler_version":"v0.50.7"}
 
 name: "Ingestion Agent — Recovery"
 "on":
@@ -219,6 +219,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
+          github-token: ${{ secrets.COPILOT_GITHUB_TOKEN }}
       - name: Create gh-aw temp directory
         run: bash /opt/gh-aw/actions/create_gh_aw_tmp_dir.sh
       - name: Configure Git credentials
@@ -485,6 +486,11 @@ jobs:
           else
             echo 'AWF binary not installed, skipping firewall log summary'
           fi
+      - env:
+          TRANSCRIPT_FILENAME: ${{ inputs.transcript_filename }}
+        name: Commit summary if written
+        run: "git add knowledge-store/summaries/\nif git diff --cached --quiet; then\n  echo \"No changes staged — noop\"\nelse\n  git config user.name \"ingestion-agent[bot]\"\n  git config user.email \"ingestion-agent@noreply.github.com\"\n  git commit -m \"feat: add summary $TRANSCRIPT_FILENAME [ingestion-agent]\"\n  git push\nfi"
+
       - name: Upload agent artifacts
         if: always()
         continue-on-error: true

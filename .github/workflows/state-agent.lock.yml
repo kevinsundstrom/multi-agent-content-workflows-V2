@@ -22,7 +22,7 @@
 # For more information: https://github.github.com/gh-aw/introduction/overview/
 #
 #
-# gh-aw-metadata: {"schema_version":"v1","frontmatter_hash":"298f7c9b403f452b8147ad90c01dc664addd57db17fdbdccf34ed1beb84fbca7","compiler_version":"v0.50.7"}
+# gh-aw-metadata: {"schema_version":"v1","frontmatter_hash":"2686e1da4a12c66f4fc2d01f6e35f02375bb353eed0647dfcd3fa2af9f0d99a7","compiler_version":"v0.50.7"}
 
 name: "State Agent"
 "on":
@@ -244,6 +244,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
+          github-token: ${{ secrets.COPILOT_GITHUB_TOKEN }}
       - name: Create gh-aw temp directory
         run: bash /opt/gh-aw/actions/create_gh_aw_tmp_dir.sh
       - name: Configure Git credentials
@@ -804,6 +805,9 @@ jobs:
           else
             echo 'AWF binary not installed, skipping firewall log summary'
           fi
+      - name: Commit STATE.md if changed
+        run: "git add knowledge-store/STATE.md\nif git diff --cached --quiet; then\n  echo \"No changes staged — noop\"\nelse\n  git config user.name \"state-agent[bot]\"\n  git config user.email \"state-agent@noreply.github.com\"\n  git commit -m \"chore: update STATE.md [state-agent]\"\n  git push\nfi"
+
       - name: Upload agent artifacts
         if: always()
         continue-on-error: true

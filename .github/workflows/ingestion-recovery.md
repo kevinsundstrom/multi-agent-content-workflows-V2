@@ -12,28 +12,49 @@ engine: copilot
 permissions:
   contents: read
 
+checkout:
+  github-token: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+
 tools:
   github:
     toolsets: [repos]
     github-token: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+  edit:
+
+post-steps:
+  - name: Commit summary if written
+    env:
+      TRANSCRIPT_FILENAME: ${{ inputs.transcript_filename }}
+    run: |
+      git add knowledge-store/summaries/
+      if git diff --cached --quiet; then
+        echo "No changes staged — noop"
+      else
+        git config user.name "ingestion-agent[bot]"
+        git config user.email "ingestion-agent@noreply.github.com"
+        git commit -m "feat: add summary $TRANSCRIPT_FILENAME [ingestion-agent]"
+        git push
+      fi
 ---
 
 # Ingestion Agent — Recovery
 
-A transcript is on `main` but has no summary. You will generate the summary and commit it directly to `main` so the state agent can process it.
+You process exactly one file: the transcript specified by `transcript_filename`. Do not list directories. Do not read any other files in the transcripts folder.
 
 ## Step 1: Check for existing summary
 
-Check whether `knowledge-store/summaries/{transcript_filename}` already exists on `main`.
+Use the repos toolset `get_file_contents` tool to fetch `knowledge-store/summaries/{transcript_filename}` from the `main` branch.
 
-If it does, output:
-> Summary already exists for `{transcript_filename}` — nothing to do.
+- If the file is returned: output `Summary already exists for {transcript_filename} — nothing to do.` and stop immediately.
+- If the file is not found (404): continue to Step 2.
 
-Then stop.
+Do not list the `knowledge-store/summaries/` directory. Do not read any other files.
 
 ## Step 2: Read the transcript
 
-Read `knowledge-store/transcripts/{transcript_filename}` from `main` in full.
+Use the repos toolset `get_file_contents` tool to fetch `knowledge-store/transcripts/{transcript_filename}` from the `main` branch. Read it in full.
+
+If the file is not found, output: `Transcript {transcript_filename} not found on main — cannot proceed.` and stop.
 
 ## Step 3: Generate the summary
 
@@ -77,10 +98,8 @@ Produce a summary using this exact format:
 - Mark every gap with `[NEEDS SOURCE]`
 - If the transcript has no timestamps, omit them rather than inventing them
 
-## Step 4: Commit the summary to main
+## Step 4: Write the summary
 
-Use the repos toolset to create the file `knowledge-store/summaries/{transcript_filename}` on the `main` branch with the summary content.
+Write the summary content to `knowledge-store/summaries/{transcript_filename}` using the edit tool. Do not use the repos toolset to commit — the post-step will commit and push it automatically.
 
-Commit message: `feat: add summary {transcript_filename} [ingestion-agent]`
-
-Commit directly to `main`. Do not create a branch. Do not open a PR. The COPILOT_GITHUB_TOKEN configured in this workflow ensures the downstream state agent trigger fires.
+Once you have written the file, stop. Do not read any other files or take further action.
