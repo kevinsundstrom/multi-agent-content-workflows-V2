@@ -22,7 +22,7 @@
 # For more information: https://github.github.com/gh-aw/introduction/overview/
 #
 #
-# gh-aw-metadata: {"schema_version":"v1","frontmatter_hash":"550babcc038652939c8aeb6b877ccdaaf0dcb9395daae7afbe7b769245e43e52","compiler_version":"v0.50.7"}
+# gh-aw-metadata: {"schema_version":"v1","frontmatter_hash":"6eb795951371e3c606378c78615ceae46807ca0493f124b359c21ba621e8b2f3","compiler_version":"v0.50.7"}
 
 name: "Ingestion Agent"
 "on":
@@ -34,11 +34,8 @@ name: "Ingestion Agent"
   workflow_dispatch:
     inputs:
       pr_number:
-        description: Open PR number to push summary to (e.g. 3)
-        required: false
-      transcript_filename:
-        description: Transcript filename for recovery commit to main (e.g. 2026-01-15-jane-smith.md)
-        required: false
+        description: Open PR number to regenerate summary for (e.g. 3)
+        required: true
 
 permissions: {}
 

@@ -8,11 +8,8 @@ on:
   workflow_dispatch:
     inputs:
       pr_number:
-        description: 'Open PR number to push summary to (e.g. 3)'
-        required: false
-      transcript_filename:
-        description: 'Transcript filename for recovery commit to main (e.g. 2026-01-15-jane-smith.md)'
-        required: false
+        description: 'Open PR number to regenerate summary for (e.g. 3)'
+        required: true
 
 engine: copilot
 
@@ -83,35 +80,6 @@ Produce a summary using the **Summary Format** below.
 Commit the summary to `knowledge-store/summaries/{filename}` on the PR branch using `push-to-pull-request-branch`.
 
 Use commit message: `feat: add summary {filename} [ingestion-agent]`
-
----
-
-## Scenario C: Manual dispatch for recovery (commit to main)
-
-**When:** Triggered by `workflow_dispatch` with `transcript_filename` provided and no `pr_number`.
-
-Use this when a transcript PR was merged without a summary being committed — the transcript is on `main` but no summary exists yet.
-
-**Critical:** Do NOT use `push-to-pull-request-branch` in this scenario. There is no PR context. You must use the GitHub API via the repos toolset to commit directly to `main`.
-
-### Step C1: Read the transcript
-
-Read `knowledge-store/transcripts/{transcript_filename}` from `main` in full.
-
-Check whether `knowledge-store/summaries/{transcript_filename}` already exists. If it does, stop and output:
-> Summary already exists for `{transcript_filename}`. Nothing to do.
-
-### Step C2: Generate the summary
-
-Produce a summary using the **Summary Format** below.
-
-### Step C3: Commit directly to main using the repos toolset
-
-Use the GitHub API (repos toolset `create_or_update_file` or equivalent) to create `knowledge-store/summaries/{transcript_filename}` directly on the `main` branch.
-
-Commit message: `feat: add summary {transcript_filename} [ingestion-agent]`
-
-This uses `COPILOT_GITHUB_TOKEN` (configured in the tools section) so the downstream state agent trigger fires. Do not open a PR. Do not use push-to-pull-request-branch.
 
 ---
 
