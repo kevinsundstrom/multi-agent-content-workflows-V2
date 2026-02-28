@@ -20,20 +20,22 @@ tools:
 
 # Ingestion Agent — Recovery
 
-A transcript is on `main` but has no summary. You will generate the summary and commit it directly to `main` so the state agent can process it.
+You process exactly one file: the transcript specified by `transcript_filename`. Do not list directories. Do not read any other files in the transcripts folder.
 
 ## Step 1: Check for existing summary
 
-Check whether `knowledge-store/summaries/{transcript_filename}` already exists on `main`.
+Use the repos toolset `get_file_contents` tool to fetch `knowledge-store/summaries/{transcript_filename}` from the `main` branch.
 
-If it does, output:
-> Summary already exists for `{transcript_filename}` — nothing to do.
+- If the file is returned: output `Summary already exists for {transcript_filename} — nothing to do.` and stop immediately.
+- If the file is not found (404): continue to Step 2.
 
-Then stop.
+Do not list the `knowledge-store/summaries/` directory. Do not read any other files.
 
 ## Step 2: Read the transcript
 
-Read `knowledge-store/transcripts/{transcript_filename}` from `main` in full.
+Use the repos toolset `get_file_contents` tool to fetch `knowledge-store/transcripts/{transcript_filename}` from the `main` branch. Read it in full.
+
+If the file is not found, output: `Transcript {transcript_filename} not found on main — cannot proceed.` and stop.
 
 ## Step 3: Generate the summary
 
@@ -84,3 +86,5 @@ Use the repos toolset to create the file `knowledge-store/summaries/{transcript_
 Commit message: `feat: add summary {transcript_filename} [ingestion-agent]`
 
 Commit directly to `main`. Do not create a branch. Do not open a PR. The COPILOT_GITHUB_TOKEN configured in this workflow ensures the downstream state agent trigger fires.
+
+Once the commit is confirmed, stop. Do not read any other files or take any further action.

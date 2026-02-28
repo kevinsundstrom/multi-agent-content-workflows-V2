@@ -41,7 +41,7 @@ This rule exists because the system must be stable and enforceable. A system tha
 
 ## Step 1: Read STATE.md
 
-Read `knowledge-store/STATE.md`.
+Use the repos toolset `get_file_contents` to read `knowledge-store/STATE.md` from `main`. Read it once. Do not read any other files yet.
 
 If the file contains "Status: Uninitialized", this is the first run. Skip Step 2 and proceed directly to Step 3.
 
@@ -64,15 +64,15 @@ Compare the current manifest against the stored manifest exactly. If every filen
 
 > Manifest unchanged — nooping.
 
-Then stop. Do not read any file contents. Do not commit anything.
+Then stop immediately. Do not read any file contents. Do not commit anything.
 
-If the manifest has changed, identify which files are **new or modified** since the last recorded manifest. Proceed to Step 3 using only those files.
+If the manifest has changed, identify which files are **new or modified** since the last recorded manifest. These are the only files you will read in Step 3 — do not read files that have not changed.
 
 ---
 
 ## Step 3: Assign new content to topics
 
-For each new or modified summary file identified in Step 2:
+For each new or modified file identified in Step 2 — and only those files:
 
 1. Read the full text of the summary.
 2. Compare its content against the existing topic list using semantic and fuzzy matching. Ask: does this summary substantially overlap with any existing topic? Apply a broad interpretation — "GitHub Actions performance" and "Actions runner speed" are the same topic. Look past terminology differences to underlying concepts.
@@ -158,3 +158,5 @@ chore: update STATE.md [state-agent]
 ```
 
 Do not open a pull request. Commit directly to main. This is required so that the downstream living document agent trigger fires.
+
+Once the commit is confirmed, stop. Do not read any other files or take further action.

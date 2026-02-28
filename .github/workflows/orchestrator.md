@@ -32,13 +32,13 @@ You open a Checkpoint 1 PR. A human must review and merge it before the draft ag
 
 ## Step 1: Identify new briefs
 
-Using the GitHub API (repos toolset), get the most recent commit on `main` that triggered this workflow. Inspect the list of files changed in that commit.
+Using the GitHub API (repos toolset), get the commit details for the most recent commit on `main` that triggered this workflow — use the commit SHA from the workflow context. Inspect the list of files changed in that commit.
 
-Find every file matching `briefs/**/brief.md` that was **added** in that commit — not modified, not deleted. Only newly created brief files are processed. If the commit only modified existing briefs, output:
+Find every file matching `briefs/**/brief.md` that was **added** in that commit — not modified, not deleted. Only newly created brief files are processed. If no files matching that pattern were added, output:
 
 > No new briefs in this commit — nooping.
 
-Then stop. Do not create any files. Do not open a PR.
+Then stop immediately. Do not read STATE.md. Do not create any files. Do not open a PR.
 
 For each newly added brief, extract the `{slug}` from its path. A brief at `briefs/my-topic/brief.md` has slug `my-topic`. This slug is used for all output paths.
 
@@ -58,14 +58,14 @@ Briefs may be free-form. Extract meaning from whatever structure the author used
 
 ## Step 3: Read the knowledge store
 
-Read `knowledge-store/STATE.md` to understand what topics exist and which have living documents.
+Use the repos toolset `get_file_contents` to read `knowledge-store/STATE.md` from `main`.
 
 For each topic in STATE.md that is potentially relevant to the brief:
 
-1. If a living document exists (`healthy` or `needs-update` status), read it from `knowledge-store/living-docs/{topic-slug}.md`. Living documents are your primary source — they represent the synthesized knowledge.
-2. Read the underlying summaries listed for that topic from `knowledge-store/summaries/`. Use summaries to find specific quotes, details, or evidence that living documents summarize at a higher level.
+1. If a living document exists (`healthy` or `needs-update` status), use `get_file_contents` to read it from `knowledge-store/living-docs/{topic-slug}.md`. Living documents are your primary source — they represent the synthesized knowledge.
+2. Read the underlying summaries listed for that topic from `knowledge-store/summaries/` using `get_file_contents` for each file. Use summaries to find specific quotes, details, or evidence that living documents summarize at a higher level.
 
-Focus your reading on topics that relate to the brief's subject matter. You do not need to read the entire knowledge store — use STATE.md to navigate to what is relevant.
+Read only topics that relate to the brief's subject matter. Do not read every topic in STATE.md — use the brief's subject areas to decide which topics are relevant. Do not list or scan any directories.
 
 ## Step 4: Build the coverage map
 
@@ -228,3 +228,5 @@ Merge this PR to authorize the draft agent to run.
 
 Close this PR and open a new brief at `briefs/{slug}-v2/brief.md` with updated direction. Do not edit `briefs/{slug}/brief.md` — brief files are locked after first commit.
 ```
+
+Once the pull request is opened, stop. Do not read any additional files or take further action.

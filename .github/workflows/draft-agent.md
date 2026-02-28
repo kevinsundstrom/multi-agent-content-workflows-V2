@@ -40,19 +40,19 @@ Your draft must be genuinely usable — not a skeleton, not a list of placeholde
 
 From the file path that triggered this workflow, extract the `{slug}`. An outline at `outputs/my-topic/outline.md` has slug `my-topic`.
 
-Using the GitHub API (repos toolset), check whether `outputs/{slug}/draft.md` already exists.
+Using the GitHub API (repos toolset), use `get_file_contents` to check whether `outputs/{slug}/draft.md` exists on `main`.
 
 If it does, output:
 
 > Draft already exists for `{slug}` — nooping to avoid overwriting human edits.
 
-Then stop. Do not write anything. Do not open a PR.
+Then stop immediately. Do not write anything. Do not open a PR.
 
-Also verify that `outputs/{slug}/coverage-map.md` exists. If it does not, output:
+Use `get_file_contents` to check whether `outputs/{slug}/coverage-map.md` exists. If it does not, output:
 
 > No coverage map found for `{slug}` — cannot proceed without it.
 
-Then stop.
+Then stop immediately.
 
 ## Step 2: Read the approved outline and coverage map
 
@@ -67,12 +67,9 @@ Read `outputs/{slug}/coverage-map.md` in full. Note:
 
 ## Step 3: Read knowledge store sources
 
-Read every living document and summary referenced in the outline and coverage map.
+Read every living document and summary explicitly referenced by filename in the outline and coverage map — and only those files. Use `get_file_contents` for each one individually.
 
-- Living documents (`knowledge-store/living-docs/`) are your primary source for synthesized human knowledge. They contain attributed quotes and sourced claims.
-- Summaries (`knowledge-store/summaries/`) give you deeper detail and additional verbatim quotes beyond what the living documents surface.
-
-When you use a quote from the knowledge store in your draft, use the verbatim text exactly as it appears. Do not paraphrase interview quotes and present them as the interviewee's words.
+Do not list or scan `knowledge-store/living-docs/` or `knowledge-store/summaries/` directories. If a file is not explicitly named in the outline or coverage map, do not read it.
 
 ## Step 4: Fetch first-party sources
 
@@ -202,3 +199,5 @@ This PR contains the first draft and a review notes audit. Edit the draft direct
 3. Address or acknowledge every `[NEEDS SOURCE]` marker
 4. Merge when the draft is ready for publication
 ```
+
+Once the pull request is opened, stop. Do not read any additional files or take further action.

@@ -32,7 +32,7 @@ You do not fetch first-party sources. You do not speculate. You do not resolve c
 
 ## Step 1: Read STATE.md and check for actionable topics
 
-Read `knowledge-store/STATE.md`.
+Use the repos toolset `get_file_contents` to read `knowledge-store/STATE.md` from `main`. Read it once. Do not read any other files yet.
 
 Find every topic with status `pending` or `needs-update`. These are your actionable topics.
 
@@ -45,19 +45,13 @@ If there are no `pending` or `needs-update` topics, output:
 
 > No actionable topics — nooping.
 
-Then stop. Do not create a branch. Do not open a PR.
+Then stop immediately. Do not create a branch. Do not open a PR. Do not read any other files.
 
 ## Step 2: Read source summaries
 
-For each actionable topic, read every summary file listed under that topic in STATE.md. Find them in `knowledge-store/summaries/`.
+For each actionable topic, read every summary file listed under that topic in STATE.md. Use the repos toolset `get_file_contents` tool to fetch each one from `knowledge-store/summaries/{filename}`.
 
-Read the full text of each summary. Note:
-- The interviewee name and date from the summary header
-- Every key point and its timestamp reference
-- Every verbatim quote and its timestamp reference
-- Every `[NEEDS SOURCE]` gap marker
-
-Do not read the original transcripts. The summaries are your only source material.
+Read only the files explicitly listed in STATE.md for that topic. Do not list or scan the `knowledge-store/summaries/` directory.
 
 ## Step 3: Create or update each living document
 
@@ -123,9 +117,9 @@ Include a `### Contradictions` subsection only if contradictions actually exist 
 
 ### For `needs-update` topics — update the existing living document
 
-Read the existing living document at `knowledge-store/living-docs/{topic-slug}.md`.
+Use the repos toolset to read the existing living document at `knowledge-store/living-docs/{topic-slug}.md`. Extract its `Last synthesized` timestamp.
 
-Read the summaries that are new since the document's `Last synthesized` timestamp — these are the ones not yet reflected in the document.
+From STATE.md, identify which summaries for this topic were added after the `Last synthesized` timestamp — these are the new summaries not yet reflected in the document. Read only those new summary files using `get_file_contents`. Do not re-read summaries already reflected in the document.
 
 Integrate the new material:
 - Add new insights, quotes, and attributions from the new summaries into the relevant thematic sections
@@ -177,3 +171,5 @@ For each document in this PR:
 
 Merging this PR marks these topics as `healthy` in the next state agent run.
 ```
+
+Once the pull request is opened, stop. Do not read any additional files or take further action.

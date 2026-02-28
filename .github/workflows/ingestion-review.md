@@ -40,9 +40,11 @@ There are three scenarios. Identify which applies and follow the corresponding s
 
 ### Step A1: Read the transcript
 
-Find every `.md` file added in `knowledge-store/transcripts/` in this PR. Read each one in full before writing anything.
+Use the pull_requests toolset to list the files changed in this PR. Filter for files with path matching `knowledge-store/transcripts/**.md` and status `added`. These are the transcripts to process.
 
-If no transcript files are present, stop.
+If no such files are present, output: `No transcript files in this PR — nothing to do.` and stop. Do not read any other files or directories.
+
+For each matching transcript file, use the repos toolset to read its full contents from the PR branch.
 
 ### Step A2: Generate the summary
 
@@ -56,6 +58,8 @@ Use commit message: `feat: add summary {filename} [ingestion-agent]`
 
 The summary will land on `main` when the PR is merged. The human reviewer will see it in the PR diff alongside the transcript.
 
+Once committed, stop. Do not read any additional files or take further action.
+
 ---
 
 ## Scenario B: Manual dispatch for an open PR
@@ -66,10 +70,14 @@ Use this to regenerate a summary on an open PR — for example, after updating a
 
 ### Step B1: Read the PR and transcript
 
-Use the pull_requests toolset to read PR `{pr_number}`. Find the transcript files added in `knowledge-store/transcripts/`. Read each one in full.
+Use the pull_requests toolset to get PR `{pr_number}`. Check whether the PR is merged.
 
-If the PR is already merged, stop and output:
+If the PR is already merged, output:
 > PR #{pr_number} is already merged. Use `transcript_filename` input instead to commit directly to main.
+
+Then stop.
+
+Use the pull_requests toolset to list files changed in PR `{pr_number}`. Filter for files with path matching `knowledge-store/transcripts/**.md` and status `added`. For each match, use the repos toolset to read its contents from the PR branch. Do not list or scan any directories.
 
 ### Step B2: Generate the summary
 
@@ -80,6 +88,8 @@ Produce a summary using the **Summary Format** below.
 Commit the summary to `knowledge-store/summaries/{filename}` on the PR branch using `push-to-pull-request-branch`.
 
 Use commit message: `feat: add summary {filename} [ingestion-agent]`
+
+Once committed, stop. Do not read any additional files or take further action.
 
 ---
 
