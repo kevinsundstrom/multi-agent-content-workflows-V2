@@ -96,9 +96,11 @@ If the manifest has changed, identify which files are **new or modified** since 
 For each new or modified file identified in Step 2 — and only those files:
 
 1. Read the full text of the summary.
-2. Compare its content against the existing topic list using semantic and fuzzy matching. Ask: does this summary substantially overlap with any existing topic? Apply a broad interpretation — "GitHub Actions performance" and "Actions runner speed" are the same topic. Look past terminology differences to underlying concepts.
+2. Assign the summary to every topic it has meaningful substance on. A summary may be assigned to multiple topics — assign to all that apply.
 3. **If it matches an existing topic:** add this summary filename to that topic's source list. Do not alter the topic's canonical slug or name in any way.
-4. **If it matches no existing topic:** infer a canonical slug for a new topic. Use the most precise, stable, official name for the concept — prefer GitHub's own product names and terminology. Format: lowercase-hyphenated (e.g., `copilot-enterprise`, `actions-cache`, `secret-scanning`).
+4. **If the content substantially covers a concept with no existing topic:** infer a canonical slug for a new topic. Use the most precise, stable, official name for the concept — prefer GitHub's own product names and terminology. Format: lowercase-hyphenated (e.g., `copilot-enterprise`, `actions-cache`, `secret-scanning`).
+
+**Product and brand-specific topics require a higher bar:** only assign a summary to a product-specific topic if the interview covers that product with specific detail — features, workflows, use cases, or technical depth. A passing mention does not qualify.
 
 Never create two topics that cover the same concept. When uncertain whether something is a new topic, assign it to the closest existing topic and note the match reasoning in your commit message.
 

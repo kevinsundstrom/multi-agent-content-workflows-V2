@@ -4,16 +4,23 @@
 
 ## Last Updated
 
-2026-02-28T16:08:55Z
+2026-03-01T00:00:00Z
 
 ## Manifest
 
 | File | Last Modified |
 |------|---------------|
-| `knowledge-store/summaries/2026-01-06-matt-knight-ai-orchestration.md` | 2026-02-28T07:22:12Z |
+| `knowledge-store/summaries/2026-01-06-matt-nigh-agent-orchestration.md` | 2026-03-01T00:00:00Z |
 | `knowledge-store/summaries/2026-01-15-christopher-harrison-christina-warren-app-modernization.md` | 2026-02-28T07:22:20Z |
 
 ## Topics
+
+### `agent-orchestration`
+
+- **Status:** nascent
+- **Interview sources:** 1 of 2 required
+- **Summaries:** `2026-01-06-matt-nigh-agent-orchestration.md`
+- **Living document:** none
 
 ### `app-modernization`
 
@@ -26,5 +33,5 @@
 
 - **Status:** nascent
 - **Interview sources:** 1 of 2 required
-- **Summaries:** `2026-01-06-matt-knight-ai-orchestration.md`
+- **Summaries:** `2026-01-06-matt-nigh-agent-orchestration.md`
 - **Living document:** none

@@ -1,7 +1,7 @@
-# Summary: Matt Knight, 2026-01-06
+# Summary: Matt Nigh, 2026-01-06
 
-**Source:** `knowledge-store/transcripts/2026-01-06-matt-knight-ai-orchestration.md`
-**Interviewee:** Matt Knight, Director of AI for Everyone, GitHub
+**Source:** `knowledge-store/transcripts/2026-01-06-matt-nigh-agent-orchestration.md`
+**Interviewee:** Matt Nigh, Director of AI for Everyone, GitHub
 **Date:** 2026-01-06
 **Summarized:** 2026-02-28T07:10:10Z
 
