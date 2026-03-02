@@ -69,7 +69,23 @@ Read the full text of the brief. Extract:
 
 Briefs may be free-form. Extract meaning from whatever structure the author used. Do not require a specific format.
 
-## Step 3: Read the knowledge store
+## Step 3: Read the skill file
+
+From the brief's format field, identify the content type and check for a skill file at `skills/{format}.md`:
+- Any format containing "email" → `skills/email.md`
+- "blog post" or "blog" → `skills/blog-post.md`
+- "guide" or "playbook" → `skills/guide.md`
+- "tutorial" → `skills/tutorial.md`
+
+Use the repos toolset `get_file_contents` to fetch the skill file from `main`.
+
+If the file exists, read it. Use the structural template, section order, and length constraints it defines to shape the outline in Step 5. A skill file for email, for example, defines a required 9-element structure — the outline should reflect that structure.
+
+If no skill file exists for this format, proceed without it.
+
+Brief-specific constraints take precedence over the skill file. If the brief overrides an element, note it in the outline.
+
+## Step 4: Read the knowledge store
 
 Read `knowledge-store/STATE.md` to understand what topics exist and which have living documents.
 
@@ -80,7 +96,7 @@ For each topic in STATE.md that is potentially relevant to the brief:
 
 Focus your reading on topics that relate to the brief's subject matter. You do not need to read the entire knowledge store — use STATE.md to navigate to what is relevant.
 
-## Step 4: Build the coverage map
+## Step 5: Build the coverage map
 
 Assess coverage for each subject area the brief requires. Be specific and honest — the coverage map's job is to give a true picture, not to make the knowledge store look good.
 
@@ -148,7 +164,7 @@ The draft agent will fetch these live. Do not fetch them now.
 
 Be rigorous about `[NEEDS SOURCE]` markers. If an important topic area in the brief has thin or no knowledge store coverage, say so explicitly. Do not write around gaps.
 
-## Step 5: Build the outline
+## Step 6: Build the outline
 
 Generate a structured outline that fits the brief's format and goal, using the knowledge store's actual coverage to drive the structure.
 
@@ -198,7 +214,7 @@ Write the outline to `outputs/{slug}/outline.md` using this format:
 
 The outline should reflect the brief's intent and the knowledge store's reality simultaneously. Do not generate an outline that the knowledge store cannot support — that would create a draft full of fabrication. If the brief's scope exceeds coverage, say so in the omitted sections and notes.
 
-## Step 6: Commit outputs and open the Checkpoint 1 PR
+## Step 7: Commit outputs and open the Checkpoint 1 PR
 
 Create a new branch named `orchestrator/{slug}`.
 

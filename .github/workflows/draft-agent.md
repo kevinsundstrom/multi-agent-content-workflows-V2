@@ -66,7 +66,25 @@ Read `outputs/{slug}/coverage-map.md` in full. Note:
 - Every `[NEEDS SOURCE]` marker — these are known gaps you should try to fill with first-party sources
 - The **First-party sources to fetch at draft time** section — these are the URLs and search terms you will use in Step 4
 
-## Step 3: Read knowledge store sources
+## Step 3: Read the skill file
+
+From the outline's **Format** field, identify the content type (e.g., `email`, `blog post`, `guide`, `tutorial`).
+
+Check whether a skill file exists at `skills/{format}.md` — map the format to a filename as follows:
+- Any format containing "email" → `skills/email.md`
+- "blog post" or "blog" → `skills/blog-post.md`
+- "guide" or "playbook" → `skills/guide.md`
+- "tutorial" → `skills/tutorial.md`
+
+Use the repos toolset `get_file_contents` to fetch the skill file from `main`.
+
+If the file exists, read it in full. It defines the structural template, tone, style rules, and word count constraints for this content type. Apply it as the foundation when writing the draft in Step 6.
+
+If no skill file exists for this format, proceed without it.
+
+**Important:** Brief-specific constraints take precedence over the skill file. If the outline or brief explicitly overrides an element of the skill file (e.g., a different word count, no bullet points), follow the brief.
+
+## Step 4: Read knowledge store sources
 
 Read every living document and summary referenced in the outline and coverage map.
 
@@ -75,7 +93,7 @@ Read every living document and summary referenced in the outline and coverage ma
 
 When you use a quote from the knowledge store in your draft, use the verbatim text exactly as it appears. Do not paraphrase interview quotes and present them as the interviewee's words.
 
-## Step 4: Fetch first-party sources
+## Step 5: Fetch first-party sources
 
 Using the web-fetch tool, fetch every URL listed in the **First-party sources to fetch at draft time** section of the coverage map. This includes GitHub Docs pages, GitHub Blog posts, and Changelog entries.
 
@@ -88,7 +106,7 @@ If a listed URL returns an error or the content is not relevant, note it and con
 
 First-party sources provide factual grounding and product accuracy. They supplement — they do not replace — what interview sources have said.
 
-## Step 5: Write the draft
+## Step 6: Write the draft
 
 Write a complete draft following the approved outline's structure exactly. Produce it in `outputs/{slug}/draft.md`.
 
@@ -122,7 +140,7 @@ Write a complete draft following the approved outline's structure exactly. Produ
 
 Do not include agent metadata, process notes, or source lists in the draft file itself. The draft is the content only. All audit information goes in review notes.
 
-## Step 6: Write review notes
+## Step 7: Write review notes
 
 Write `outputs/{slug}/review-notes.md`. This is an accuracy and alignment audit for the human editor.
 
@@ -162,7 +180,7 @@ Write `outputs/{slug}/review-notes.md`. This is an accuracy and alignment audit 
 {Any issues the editor should know about: contradictions between sources that weren't resolved, areas where coverage was thin and the draft reflects that, tone inconsistencies, or places where a quote is particularly strong and worth preserving in edits.}
 ```
 
-## Step 7: Commit and open the Checkpoint 2 PR
+## Step 8: Commit and open the Checkpoint 2 PR
 
 Create a new branch named `draft/{slug}`.
 
