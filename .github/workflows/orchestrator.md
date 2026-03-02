@@ -5,6 +5,11 @@ on:
     branches: [main]
     paths:
       - 'briefs/**/brief.md'
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: 'Brief slug to reprocess (e.g. agent-orchestration-nurture-email-1)'
+        required: true
 
 engine: copilot
 
@@ -30,9 +35,13 @@ You turn a content brief into a coverage map and a structured outline. The cover
 
 You open a Checkpoint 1 PR. A human must review and merge it before the draft agent runs. That is the intent of this gate — do not shortcut it.
 
-## Step 1: Identify new briefs
+## Step 1: Identify the brief to process
 
-Using the GitHub API (repos toolset), get the most recent commit on `main` that triggered this workflow. Inspect the list of files changed in that commit.
+There are two scenarios. Identify which applies.
+
+**Scenario A: Push event (normal flow)**
+
+Get the most recent commit on `main` that triggered this workflow. Inspect the list of files changed in that commit.
 
 Find every file matching `briefs/**/brief.md` that was **added** in that commit — not modified, not deleted. Only newly created brief files are processed. If the commit only modified existing briefs, output:
 
@@ -41,6 +50,10 @@ Find every file matching `briefs/**/brief.md` that was **added** in that commit 
 Then stop. Do not create any files. Do not open a PR.
 
 For each newly added brief, extract the `{slug}` from its path. A brief at `briefs/my-topic/brief.md` has slug `my-topic`. This slug is used for all output paths.
+
+**Scenario B: Manual dispatch (re-run)**
+
+When triggered by `workflow_dispatch`, the slug is provided directly as the `slug` input. Use it to read `briefs/{slug}/brief.md`. Do not inspect commits. Proceed to Step 2.
 
 ## Step 2: Read the brief
 

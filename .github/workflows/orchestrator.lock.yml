@@ -22,7 +22,7 @@
 # For more information: https://github.github.com/gh-aw/introduction/overview/
 #
 #
-# gh-aw-metadata: {"schema_version":"v1","frontmatter_hash":"4b28fc4133b0a191fc2fd59683a2b5487e9da76dbfcc09ec60bb6fbdf7031259","compiler_version":"v0.50.7"}
+# gh-aw-metadata: {"schema_version":"v1","frontmatter_hash":"82bb0ce429b833e83ed3264f9d0d7a1c16856e6b3c46f728c77acc73689a460e","compiler_version":"v0.50.7"}
 
 name: "Orchestrator"
 "on":
@@ -31,6 +31,11 @@ name: "Orchestrator"
     - main
     paths:
     - briefs/**/brief.md
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: Brief slug to reprocess (e.g. agent-orchestration-nurture-email-1)
+        required: true
 
 permissions: {}
 
