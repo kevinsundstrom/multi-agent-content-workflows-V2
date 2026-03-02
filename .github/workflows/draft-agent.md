@@ -16,6 +16,7 @@ network:
   allowed:
     - defaults
     - github
+    - github.blog
 
 tools:
   github:
