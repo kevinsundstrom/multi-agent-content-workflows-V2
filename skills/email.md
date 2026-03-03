@@ -53,7 +53,7 @@ This renders as a designed button (green) in the email template. It appears abov
 One to two sentences. Connects the headline and hero quote to the specific value the reader will get. This is where context lives — what the asset is, why it was made, who it's for. Keep it factual and direct.
 
 ### 7. The value triad
-Exactly three bullet points. This is a required structural element — do not convert to prose, do not combine into a paragraph, do not reduce to fewer than three bullets. The three-bullet format is part of the email template design and is non-negotiable regardless of brief constraints. A brief saying "no numbered list" refers to numbered lists in body prose, not this element.
+Exactly three bullet points. This is a system requirement — the template renders it as a visual element. Do not convert to prose, do not reduce to fewer than three bullets. A brief instruction like "no numbered list" refers to numbered lists in prose sections, not this element.
 
 Rules:
 - Each starts with a strong action verb (Identify, Reclaim, Increase, Implement, Reduce, Build, etc.)
@@ -87,14 +87,22 @@ The email's job is to make the reader curious enough to click. It does not summa
 
 ---
 
-## Brief overrides
+## What the skill controls vs. what the brief controls
 
-Brief-specific constraints take precedence over this skill file for tone, word count, banned phrases, and CTA language.
+This skill file contains two types of guidance:
 
-The following structural elements are non-negotiable and cannot be overridden by a brief:
-- The 9-element order
-- The value triad (exactly three bullets with action verbs — never prose-adapted)
-- Sentence case
-- One primary CTA button, one final text link
+**System requirements — skill wins.** These elements exist because of how the email template is built and rendered in the sending platform. They are structural facts, not editorial preferences. The brief cannot override them.
+- The 9-element structure and order
+- The value triad (exactly three bullets — the template renders this as a specific visual element; prose is not a valid substitute)
+- Sentence case (platform convention)
+- One primary CTA button above the fold, one final text link at the bottom
 
-Everything else — subject line angle, hero quote source, bridge length, closer framing — the brief controls.
+**Editorial defaults — brief wins.** These are best-practice starting points. A brief that specifies otherwise takes precedence.
+- Word count
+- Tone guidance beyond Nerdy Peer baseline
+- Banned phrases
+- Subject line angle and form
+- Hero quote source and selection
+- Bridge length and framing
+- CTA text and anchor language
+- Closer length and approach
