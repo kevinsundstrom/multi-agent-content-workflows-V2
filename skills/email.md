@@ -53,7 +53,9 @@ This renders as a designed button (green) in the email template. It appears abov
 One to two sentences. Connects the headline and hero quote to the specific value the reader will get. This is where context lives — what the asset is, why it was made, who it's for. Keep it factual and direct.
 
 ### 7. The value triad
-Exactly three bullet points. Rules:
+Exactly three bullet points. This is a required structural element — do not convert to prose, do not combine into a paragraph, do not reduce to fewer than three bullets. The three-bullet format is part of the email template design and is non-negotiable regardless of brief constraints. A brief saying "no numbered list" refers to numbered lists in body prose, not this element.
+
+Rules:
 - Each starts with a strong action verb (Identify, Reclaim, Increase, Implement, Reduce, Build, etc.)
 - Each is a complete sentence ending with a period
 - Together they answer: what will the reader learn, what problem does it solve, and what outcome does it produce
@@ -87,4 +89,12 @@ The email's job is to make the reader curious enough to click. It does not summa
 
 ## Brief overrides
 
-Brief-specific constraints take precedence over this skill file. If a brief specifies a different word count, prohibits bullet points, or calls for a different tone, follow the brief. This skill file defines the default — briefs define the exception.
+Brief-specific constraints take precedence over this skill file for tone, word count, banned phrases, and CTA language.
+
+The following structural elements are non-negotiable and cannot be overridden by a brief:
+- The 9-element order
+- The value triad (exactly three bullets with action verbs — never prose-adapted)
+- Sentence case
+- One primary CTA button, one final text link
+
+Everything else — subject line angle, hero quote source, bridge length, closer framing — the brief controls.
