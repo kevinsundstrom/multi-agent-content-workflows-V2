@@ -3,7 +3,7 @@
 **Brief:** `briefs/agent-orchestration-nurture-email-1/brief.md`
 **Slug:** `agent-orchestration-nurture-email-1`
 **Format:** nurture email (single, under 300 words)
-**Generated:** 2026-03-02T22:53:18Z
+**Generated:** 2026-03-03T00:26:20Z
 
 ---
 
@@ -79,14 +79,21 @@ The brief's suggested framing: "You've assigned the work. Here's what's happenin
 
 ---
 
-## 7. The value triad — prose adaptation
+## 7. The value triad
 
 **Coverage:** partial
 **Sources:** `2026-01-06-matt-nigh-agent-orchestration.md` — "Real-Time Steering and Governance," "When Not to Run Parallel Agents," "Writing Effective Agent Specs"
 
-**Brief override:** The brief prohibits numbered lists and listicle format ("No numbered list of tips. This is a short editorial email, not a listicle."). The three ideas from the value triad should be expressed in flowing prose rather than bullet points, while still covering: (1) what the reader will understand, (2) the problem it names, and (3) the outcome or strategy.
+Exactly three bullet points. This is a non-negotiable structural element — it cannot be prose-adapted. The brief's constraint ("No numbered list of tips") refers to numbered lists in body prose, not this element. The value triad's three-bullet format is part of the email template and must remain.
 
-In prose form: name the failure patterns (misreading of intention, hallucination on integration failure) in behavioral terms the reader recognizes from lived experience. Two to three sentences. Point toward the structural explanation without delivering it.
+Each bullet starts with a strong action verb and is a complete sentence ending with a period. Together they answer: what will the reader understand, what problem does this name, and what outcome or strategy does it point toward.
+
+Direction for the three bullets (align to the CTA article as educational content):
+- Bullet 1: What the reader will understand — the structural nature of agent failure modes (misreading of intention, hallucination on integration failure)
+- Bullet 2: The problem it names — why these failures are not random and not a prompting issue
+- Bullet 3: The outcome — understanding the engineering layer that determines whether multi-agent workflows are reliable at scale
+
+Draft agent fetches the CTA article to align the bullets precisely to what the article delivers, not to what the knowledge store covers.
 
 **Word count note:** Brief specifies under 300 words for the full body — overriding the skill file's 150-word limit. The additional headroom belongs here and in the bridge, not in any single section.
 
@@ -124,7 +131,7 @@ Matt Nigh's monitoring philosophy — the 5-minute kickoff window, the bicycle a
 ## Notes for the draft agent
 
 - **Word count:** Under 300 words for the full body — brief override of the skill file's 150-word limit. Allocate approximately 1–2 sentences per section; every sentence must earn its place.
-- **No bullet points or numbered lists.** The brief prohibits listicle format. Element 7 (the value triad) must be expressed in prose.
+- **No numbered lists in body prose.** The brief prohibits listicle format in narrative copy. Element 7 (the value triad) is exempt — it must remain exactly three bullet points per the skill file's non-negotiable structural rules.
 - **One CTA only.** No secondary links. Element 9 (final link) is omitted per brief constraint.
 - **Hero quote must come from the CTA article**, not the Matt Nigh interview. Fetch the article before drafting.
 - **Do not name Matt Nigh or reference the interview.** Failure-mode vocabulary is editorial input for the writer, not a citation to include in the email.
