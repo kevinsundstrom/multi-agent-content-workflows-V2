@@ -1,7 +1,7 @@
 # Coverage Map: Agent Orchestration Nurture — Email 1 of 3
 
 **Brief:** `briefs/agent-orchestration-nurture-email-1/brief.md`
-**Generated:** 2026-03-02T06:08:00Z
+**Generated:** 2026-03-02T22:53:18Z
 
 ## Summary
 
