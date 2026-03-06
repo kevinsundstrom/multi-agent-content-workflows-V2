@@ -1,0 +1,50 @@
+name: Transcript Cleanup
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'knowledge-store/transcripts/**.md'
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Delete summaries for removed transcripts
+        env:
+          GIT_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+          GIT_REPO: ${{ github.repository }}
+        run: |
+          deleted=$(git diff --name-only --diff-filter=D HEAD~1 HEAD -- 'knowledge-store/transcripts/')
+
+          if [ -z "$deleted" ]; then
+            echo "No transcripts deleted — noop"
+            exit 0
+          fi
+
+          changed=false
+          for transcript in $deleted; do
+            filename=$(basename "$transcript")
+            summary="knowledge-store/summaries/$filename"
+            if [ -f "$summary" ]; then
+              git rm "$summary"
+              echo "Removed: $summary"
+              changed=true
+            else
+              echo "No summary found for $transcript — skipping"
+            fi
+          done
+
+          if [ "$changed" = "true" ]; then
+            git config user.name "transcript-cleanup[bot]"
+            git config user.email "transcript-cleanup@noreply.github.com"
+            git remote set-url origin "https://x-access-token:${GIT_TOKEN}@github.com/${GIT_REPO}.git"
+            git commit -m "chore: remove summaries for deleted transcripts [cleanup]"
+            git push
+          fi
