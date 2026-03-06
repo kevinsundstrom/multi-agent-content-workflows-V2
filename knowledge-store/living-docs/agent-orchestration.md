@@ -3,8 +3,8 @@
 > This document synthesizes what interview sources have said about this topic. It is created and maintained by the living document agent. Every claim is sourced. Do not edit directly.
 
 **Topic:** `agent-orchestration`
-**Last synthesized:** 2026-03-05T22:30:16Z
-**Interview sources:** 2 — see [Source Index](#source-index)
+**Last synthesized:** 2026-03-06T16:17:35Z
+**Interview sources:** 3 — see [Source Index](#source-index)
 
 ---
 
@@ -15,6 +15,8 @@ Both sources describe agent orchestration in terms of a fundamental expansion of
 > "The ROI is that you have a technical agent on the team you can assign work to and you don't have to wait for external people." — Matt Nigh, `[05:26]` · [2026-01-06-matt-nigh-agent-orchestration.md](../summaries/2026-01-06-matt-nigh-agent-orchestration.md)
 
 > "Agentic Workflows is really thinking about like, how can we push the boundaries of what is automatable as part of my repository." — Idan, `[00:00:26]` · [2026-03-05-andrea-griffiths-agentic-workflows.md](../summaries/2026-03-05-andrea-griffiths-agentic-workflows.md)
+
+Tim (GitHub Checkout, February 2026) described CCA from a product perspective as a coding agent that "runs in the cloud in the background" — tasks can be assigned from GitHub issues, the mobile app, VS Code, Slack, Teams integrations, or the Agents panel. The compute layer is GitHub Actions, the same infrastructure used for CI/CD.
 
 Both sources independently note that the space of possible uses is still being discovered. Idan stated explicitly: "We don't even know what all those things are yet." Matt described how he and a colleague maintained internal platforms with no dedicated developer by using Copilot agents to handle upgrades, refactors, bug fixes, and security vulnerabilities — including a four-year-old codebase with memory leaks.
 
@@ -33,6 +35,10 @@ Matt Nigh describes the shift as moving from sync AI usage (an individual contri
 Idan describes this same shift from a personal realization angle — not as a cultural prescription but as something that happened to him as a builder in the space:
 
 > "Now with Agentic Workflows, it's like my relationship with what is possible to delegate has changed overnight, and now the hard part is actually thinking about, 'Wait a minute, that's something I could take off of my plate now,' and realizing what those things are." — Idan, `[00:08:04]` · [2026-03-05-andrea-griffiths-agentic-workflows.md](../summaries/2026-03-05-andrea-griffiths-agentic-workflows.md)
+
+Tim describes the same async reality at a product level: once a task is delegated, the user can shut their laptop and disconnect from the internet — Copilot delivers a PR when done. He noted that startup time is longer than local agents because the cloud environment needs to spin up, but the trade-off is full background independence.
+
+> "This is exactly the kind of work that I don't like doing, so that's the kind of thing that I want to give Copilot to do for me in the background." — Tim, `[2:15]` · [2026-02-18-andrea-griffiths-2-18-26.md](../summaries/2026-02-18-andrea-griffiths-2-18-26.md)
 
 Matt offered a concrete workflow example: Ben Balter blocks five-to-fifteen-minute increments throughout the day exclusively for creating issues, then has dedicated review time the following day. Matt summarized the discipline required: "You need to budget time for creating issues in a way that you probably didn't in the past."
 
@@ -55,6 +61,10 @@ Both sources describe how agents receive their instructions, though the mechanis
 > "Think of it as if GitHub Actions and Copilot had a baby together then this is kind of what it is." — Idan, `[00:04:29]` · [2026-03-05-andrea-griffiths-agentic-workflows.md](../summaries/2026-03-05-andrea-griffiths-agentic-workflows.md)
 
 Both sources also mention referencing persistent instruction files (Matt: AGENTS.md, Idan: agents.md or Copilot instructions) to avoid repeating context across every agent invocation.
+
+Tim added a constraint that applies regardless of how work is structured: "Generally I'd say that Copilot coding agent is going to be great for tasks that are small to medium size, and you've got a really good, clear description of what you want. It's not so good if you're confused and you need to make lots of decisions." This aligns with Matt's rule about giving agents a "clear sliver of work."
+
+> "Generally I'd say that Copilot coding agent is going to be great for tasks that are small to medium size, and you've got a really good, clear description of what you want. It's not so good if you're confused and you need to make lots of decisions." — Tim, `[7:38]` · [2026-02-18-andrea-griffiths-2-18-26.md](../summaries/2026-02-18-andrea-griffiths-2-18-26.md)
 
 ---
 
@@ -95,9 +105,13 @@ A third failure mode Matt described involves self-correction: agents can be inst
 
 ## Managing a Fleet of Parallel Agents
 
-This theme was covered only by Matt Nigh; Idan did not address fleet management directly.
+This theme was covered only by Matt Nigh and Tim; Idan did not address fleet management directly.
 
 Scaling from one agent to a fleet follows the same async principle but requires budgeting dedicated time for issue creation — not relying on Slack or ad-hoc communication. Custom agents are key: different repos can have specialized agents (documentation agent, writing agent, coding standards agent). Sub-issues can structure work: a parent issue can have ten sub-issues each individually assigned to Copilot, though today you cannot assign the parent and have sub-issues automatically picked up.
+
+Tim described the technical mechanism for custom agents: they are defined by placing files in `.github/agents/` in a repository and can be shared across an entire organization or enterprise, not just a single repo — extending the per-repo model to an org-wide fleet.
+
+`[NEEDS SOURCE]` The specific mechanism for sharing custom agents across an organization or enterprise is mentioned by Tim but not demonstrated or explained in detail.
 
 The primary risk of parallel agents is merge conflicts when two agents modify the same file or code that is a dependency of the other agent's work. Matt's rule: if agents are touching the same files, do not run them in parallel; if touching shared dependency code without deep understanding of those dependencies, single-thread instead.
 
@@ -125,6 +139,38 @@ Idan's examples site also included: CI Doctor (detects and fixes failing CI work
 
 ---
 
+## Local/Cloud Handoff and Model Selection
+
+Tim described two orchestration capabilities that neither Matt nor Idan addressed: the ability to move work between local and cloud execution, and the ability to select the underlying model for an agent session.
+
+**Local/cloud handoff:** From a cloud coding agent session page, a "Continue in Copilot CLI" option copies a command to the clipboard. Running it lets the user tail cloud logs in the terminal or switch into local mode, which checks out Copilot's cloud branch locally. When switching to local mode, Copilot retains context of the original prompt and all work it performed in the cloud. The reverse is also possible: pressing the ampersand key in the Copilot CLI switches a local session into "Delegate changes to remote repository mode," where work continues in the cloud while the user continues locally.
+
+> "Copilot is going to have the context on what I asked it to do originally. So like the message at the top of the thread, the prompt that I gave it, and it's also going to, you know, know about all the work that it did." — Tim, `[9:25]` · [2026-02-18-andrea-griffiths-2-18-26.md](../summaries/2026-02-18-andrea-griffiths-2-18-26.md)
+
+**Model selection:** A model picker was added to the Agents panel; previously Claude Sonnet 4.5 was always used for background coding agent sessions. The model picker is available to Copilot Pro and Pro+ users, with business and enterprise availability described as "near future." Selecting Claude Opus costs three premium requests instead of the standard rate.
+
+> "Before, we always use Claude Sonnet 4.5 when you were using this background coding agent, but now we give you options." — Tim, `[1:43]` · [2026-02-18-andrea-griffiths-2-18-26.md](../summaries/2026-02-18-andrea-griffiths-2-18-26.md)
+
+`[NEEDS SOURCE]` The exact timeline for bringing the model picker to business and enterprise users is described only as "near future."
+
+`[NEEDS SOURCE]` The standard premium request cost for non-Opus models is not specified; only Opus is called out as costing three premium requests.
+
+---
+
+## Future Directions
+
+Tim described several roadmap capabilities not addressed by Matt Nigh or Idan.
+
+**Private/planning mode:** An upcoming feature will let Copilot work privately first; the developer can then review the work before choosing to open a PR or discard it. This will enable a planning workflow — ask Copilot to plan the work, review the plan, then start coding. Tim noted this is currently not possible because a PR opens immediately.
+
+> "One thing we're going to be shipping soon is the ability to have Copilot work privately, and then you can choose to open the PR when you're ready." — Tim, `[10:57]` · [2026-02-18-andrea-griffiths-2-18-26.md](../summaries/2026-02-18-andrea-griffiths-2-18-26.md)
+
+**Background analysis without a PR:** Future use cases Tim described include asking Copilot to search a repository for performance improvements and return a list of ideas for triage, generating quarterly work reports from a developer's commits, and summarizing open issues to help maintainers prioritize. These workflows would run in the background without producing a pull request.
+
+`[NEEDS SOURCE]` The shipping timeline for private/planning mode is described only as "soon" with no date or release specified.
+
+---
+
 ## Open Source Maintenance as a Priority Use Case
 
 Idan specifically identified open source maintainers as a priority audience for Agentic Workflows. He framed the AI code generation trend as a double-edged sword for maintainers: they get AI assistance, but the volume of incoming contributions can become a firehose.
@@ -144,4 +190,5 @@ Matt Nigh did not address open source specifically; his frame was entirely inter
 | Interview | Interviewee | Date |
 |-----------|-------------|------|
 | [2026-01-06-matt-nigh-agent-orchestration.md](../summaries/2026-01-06-matt-nigh-agent-orchestration.md) | Matt Nigh, Director of AI for Everyone, GitHub | 2026-01-06 |
+| [2026-02-18-andrea-griffiths-2-18-26.md](../summaries/2026-02-18-andrea-griffiths-2-18-26.md) | Tim (surname and role not stated), GitHub; hosted by Andrea Griffiths, GitHub | 2026-02-18 |
 | [2026-03-05-andrea-griffiths-agentic-workflows.md](../summaries/2026-03-05-andrea-griffiths-agentic-workflows.md) | Idan (last name not stated), GitHub Agentic Workflows team; hosted by Andrea Griffiths, GitHub | 2026-03-04 |
