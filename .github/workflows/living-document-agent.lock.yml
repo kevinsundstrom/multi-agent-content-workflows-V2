@@ -22,7 +22,7 @@
 # For more information: https://github.github.com/gh-aw/introduction/overview/
 #
 #
-# gh-aw-metadata: {"schema_version":"v1","frontmatter_hash":"cd19a9f94ec3896c12fe37a517a4b4401d368d118b0591bc05dc86e40ea53136","compiler_version":"v0.50.7"}
+# gh-aw-metadata: {"schema_version":"v1","frontmatter_hash":"fd0bf9f2570541b6e1dead369d83832692aae139cb34c442b9100f8aa6eb38b9","compiler_version":"v0.50.7"}
 
 name: "Living Document Agent"
 "on":
@@ -623,7 +623,7 @@ jobs:
                   "GITHUB_LOCKDOWN_MODE": "$GITHUB_MCP_LOCKDOWN",
                   "GITHUB_PERSONAL_ACCESS_TOKEN": "\${GITHUB_MCP_SERVER_TOKEN}",
                   "GITHUB_READ_ONLY": "1",
-                  "GITHUB_TOOLSETS": "repos"
+                  "GITHUB_TOOLSETS": "repos,pull_requests"
                 }
               },
               "safeoutputs": {

@@ -14,7 +14,7 @@ permissions:
 
 tools:
   github:
-    toolsets: [repos]
+    toolsets: [repos, pull_requests]
     github-token: ${{ secrets.COPILOT_GITHUB_TOKEN }}
 
 safe-outputs:
@@ -46,6 +46,18 @@ If there are no `pending` or `needs-update` topics, output:
 > No actionable topics — nooping.
 
 Then stop. Do not create a branch. Do not open a PR.
+
+## Step 1.5: Check for existing open PRs
+
+List all open pull requests in the repository with the `living-documents` label.
+
+For each actionable topic identified in Step 1, check whether any open PR's title contains that topic's slug. If it does, remove that topic from your actionable list — it is already being handled.
+
+If all actionable topics are covered by existing open PRs, output:
+
+> All pending topics already have open PRs — nooping.
+
+Then stop. Do not create any documents or open a PR.
 
 ## Step 2: Read source summaries
 
