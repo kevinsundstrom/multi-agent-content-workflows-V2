@@ -44,6 +44,8 @@ Find every `.md` file added in `knowledge-store/transcripts/` in this PR. Read e
 
 If no transcript files are present, stop.
 
+Derive the interviewee's full name from the filename. The filename format is `YYYY-MM-DD-firstname-lastname-topic-slug.md`. The second and third segments are the first and last name. For example, `2026-01-20-saif-gunja-security-thought-leadership.md` → interviewee is **Saif Gunja**. Use this name as the authoritative identity for quote attribution throughout the summary.
+
 ### Step A2: Generate the summary
 
 For each transcript, produce a summary using the format in the **Summary Format** section below.
@@ -67,6 +69,8 @@ Use this to regenerate a summary on an open PR — for example, after updating a
 ### Step B1: Read the PR and transcript
 
 Use the pull_requests toolset to read PR `{pr_number}`. Find the transcript files added in `knowledge-store/transcripts/`. Read each one in full.
+
+Derive the interviewee's full name from the filename using the same rule as Step A1.
 
 If the PR is already merged, stop and output:
 > PR #{pr_number} is already merged. Use `transcript_filename` input instead to commit directly to main.
@@ -104,7 +108,9 @@ Use this exact format for every summary regardless of scenario.
 - {Key point in the interviewee's own terms} `[HH:MM:SS]`
 - {Key point} `[HH:MM:SS]`
 
-> "{Verbatim quote — exact words, no paraphrase}" `[HH:MM:SS]`
+> "{Verbatim quote — exact words, no paraphrase}" — {First name} `[HH:MM:SS]`
+
+> "{Verbatim quote}" — `[AMBIGUOUS]` `[HH:MM:SS]`
 
 ### {Next heading}
 
@@ -112,9 +118,9 @@ Use this exact format for every summary regardless of scenario.
 
 ## Notable Quotes
 
-> "{Verbatim quote}" `[HH:MM:SS]`
+> "{Verbatim quote}" — {First name} `[HH:MM:SS]`
 
-> "{Verbatim quote}" `[HH:MM:SS]`
+> "{Verbatim quote}" — `[AMBIGUOUS]` `[HH:MM:SS]`
 
 ## Gaps
 
@@ -123,7 +129,8 @@ Use this exact format for every summary regardless of scenario.
 
 **Rules:**
 - Every key point must have a timestamp reference in `[HH:MM:SS]` format
-- Every quote must be verbatim — the interviewee's exact words, preserved completely
+- Every quote must be verbatim — the speaker's exact words, preserved completely
+- Every quote must be attributed: use the interviewee's first name when the speaker is clearly them, or `[AMBIGUOUS]` when it is unclear whether the quote is from the interviewee or the interviewer
 - Never paraphrase a quote and present it as what the person said
 - Never infer, extrapolate, or fill gaps — only capture what was explicitly said
 - Mark every gap with `[NEEDS SOURCE]`
