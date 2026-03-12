@@ -4,7 +4,7 @@
 
 ## Last Updated
 
-2026-03-06T17:20:43Z
+2026-03-12T21:03:07Z
 
 ## Manifest
 
@@ -18,6 +18,7 @@
 | `knowledge-store/summaries/2026-01-20-saif-gunja-security-thought-leadership.md` | 2026-03-05T04:42:01Z |
 | `knowledge-store/summaries/2026-02-18-andrea-griffiths-2-18-26.md` | 2026-03-06T05:21:38Z |
 | `knowledge-store/summaries/2026-03-05-andrea-griffiths-agentic-workflows.md` | 2026-03-05T22:16:33Z |
+| `knowledge-store/summaries/2026-03-09-colin-dembovsky-copilot-pr-metrics.md` | 2026-03-12T21:01:02Z |
 
 ## Topics
 
@@ -43,6 +44,13 @@
 - **Summaries:** `2026-01-06-matt-nigh-agent-orchestration.md`, `2026-01-20-saif-gunja-security-thought-leadership.md`, `2026-02-18-andrea-griffiths-2-18-26.md`, `2026-03-05-andrea-griffiths-agentic-workflows.md`
 - **Living document:** `copilot-coding-agent.md`
 - **Last synthesized:** 2026-03-06T16:17:35Z
+
+### `copilot-metrics`
+
+- **Status:** nascent
+- **Interview sources:** 1 of 2 required
+- **Summaries:** `2026-03-09-colin-dembovsky-copilot-pr-metrics.md`
+- **Living document:** none
 
 ### `github-advanced-security`
 
